@@ -1,0 +1,33 @@
+FROM node:21.5-bullseye-slim AS base
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+COPY . .
+
+
+FROM base as production
+
+
+ENV NODE_ENV production
+
+
+RUN --mount=type=cache,target=/usr/src/app/.npm \
+  npm set cache /usr/src/app/.npm && \
+  npm ci --only=production
+
+
+USER node
+
+COPY --chown=node:node . .
+
+EXPOSE 8080
+
+CMD [ "node", "index.js" ]
+
+
+
+
+
+
