@@ -1,6 +1,0 @@
-FROM golang:1.21-bullseye AS build
-
-RUN useradd -u 1001 nonroot
-
-WORKDIR /app 
-
