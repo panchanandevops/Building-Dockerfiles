@@ -14,7 +14,7 @@ RUN cd src && go build -o server
 
 RUN pwd && ls
 
-# This container exposes port 8080 to the outside world
+# This container exposes port 8000 to the outside world
 EXPOSE 8000
 
 # Run the executable
