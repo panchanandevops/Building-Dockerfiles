@@ -20,7 +20,7 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
-		http.Error(w, "404 not found", http.StatusNotFound)
+		http.Error(w, "Your Docker Image is Running!", http.StatusNotFound)
 		return
 	}
 	if r.Method != "GET" {
