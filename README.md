@@ -30,6 +30,12 @@ Before you begin, ensure you have the following prerequisites:
 
 ## General Repository Information
 
-- [Repository README](./README.md)
-
 Feel free to explore each project for specific details on how Docker is configured for the respective applications.
+
+## Acknowledgments
+
+Special thanks to my teacher **Sid Palas** for their guidance, and to the **Devops Directive** YouTube channel for valuable insights into DevOps practices.
+
+- [Devops Directive YouTube Channel](https://www.youtube.com/c/DevopsDirective)
+
+Thank you for the inspiration and educational content that has contributed to my growth as a developer and DevOps practitioner.
