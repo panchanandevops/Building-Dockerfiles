@@ -1,48 +1,51 @@
-# Pin specific version for stability
-# Use separate stage for building image
-# Use debian for easier build utilities
+# Stage 1: Build Stage
+# Use a specific version of the official Golang image as the base image
 FROM golang:1.21-bullseye AS build
 
-# Add non root user
+# Create a non-root user for running the application
 RUN useradd -u 1001 nonroot
 
+# Set the working directory inside the container
 WORKDIR /app 
 
-# Copy only files required to install dependencies (better layer caching)
-COPY go.mod  ./
+# Copy only the go.mod file to install dependencies efficiently and leverage layer caching
+COPY go.mod ./
 
-# Use cache mount to speed up install of existing dependencies
+# Use cache mounts to speed up the installation of existing dependencies
 RUN --mount=type=cache,target=/go/pkg/mod \
-  --mount=type=cache,target=/root/.cache/go-build \
-  go mod download
+    --mount=type=cache,target=/root/.cache/go-build \
+    go mod download
 
+# Copy the entire application source code
 COPY . .
 
-# Compile application during build rather than at runtime
-# Add flags to statically link binary
+# Compile the application during build and statically link the binary
 RUN go build \
-  -ldflags="-linkmode external -extldflags -static" \
-  -tags netgo \
-  -o go-web-server
+    -ldflags="-linkmode external -extldflags -static" \
+    -tags netgo \
+    -o go-web-server
 
-# Use separate stage for deployable image
+# Stage 2: Deployable Image
+# Use a minimal scratch image as the base image for the final image
 FROM scratch
 
-# Set gin mode
+# Set the GIN_MODE environment variable to release
 ENV GIN_MODE=release
 
+# Set the working directory inside the container
 WORKDIR /
 
-# Copy the passwd file
+# Copy the /etc/passwd file from the build stage to provide non-root user information
 COPY --from=build /etc/passwd /etc/passwd
 
-# Copy the app binary from the build stage
+# Copy the compiled application binary from the build stage to the final image
 COPY --from=build /app/go-web-server go-web-server
 
-# Use nonroot user
+# Use the non-root user created in the build stage
 USER nonroot
 
-# Indicate expected port
+# Expose the port the application will run on
 EXPOSE 8080
 
+# Define the command to run the application when the container starts
 CMD ["/go-web-server"]
