@@ -7,7 +7,9 @@ This repository contains several example projects demonstrating the use of Docke
 Before you begin, ensure you have the following prerequisites:
 
 - [Docker](https://www.docker.com/get-started) installed on your machine.
+## Learning How to build a Dockerfile
 
+![](./Diagram/Docker.png)
 ## Projects
 
 1. ### [Flask-app](./Flask-app)

@@ -11,6 +11,10 @@ WORKDIR /app
 # Copy only the go.mod file to install dependencies efficiently and leverage layer caching
 COPY go.mod ./
 
+# Set the GIN_MODE environment variable to release
+ENV GIN_MODE=release
+
+
 # Use cache mounts to speed up the installation of existing dependencies
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
@@ -29,9 +33,6 @@ RUN go build \
 # Use a minimal scratch image as the base image for the final image
 FROM scratch
 
-# Set the GIN_MODE environment variable to release
-ENV GIN_MODE=release
-
 # Set the working directory inside the container
 WORKDIR /
 
@@ -39,7 +40,7 @@ WORKDIR /
 COPY --from=build /etc/passwd /etc/passwd
 
 # Copy the compiled application binary from the build stage to the final image
-COPY --from=build /app/go-web-server go-web-server
+COPY --from=build /app/go-web-server /go-web-server
 
 # Use the non-root user created in the build stage
 USER nonroot
@@ -48,4 +49,4 @@ USER nonroot
 EXPOSE 8080
 
 # Define the command to run the application when the container starts
-CMD ["/go-web-server"]
+CMD ["./go-web-server"]
