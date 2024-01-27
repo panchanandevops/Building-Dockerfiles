@@ -33,9 +33,6 @@ RUN go build \
 # Use a minimal scratch image as the base image for the final image
 FROM scratch
 
-# Set the working directory inside the container
-WORKDIR /
-
 # Copy the /etc/passwd file from the build stage to provide non-root user information
 COPY --from=build /etc/passwd /etc/passwd
 
