@@ -16,7 +16,7 @@ To build the Docker image, follow these steps:
 3. Run the following command:
 
     ```bash
-    docker build -t your-username/go-web-server:latest -f Dockerfile.prod .
+    docker build -t your-username/go-web-server:latest -f Dockerfile .
     ```
 
     Replace `your-username` with your DockerHub username or the desired repository name.
